@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { sites, templateOptions } from './config/sites.js'
 import { BarberTemplate, ClinicTemplate, RestaurantTemplate } from './templates/Templates.jsx'
+import { CorporateTemplate } from './templates/CorporateTemplate.jsx'
 
 const templates = { restaurant: RestaurantTemplate, clinic: ClinicTemplate, barber: BarberTemplate }
 
 function initialTemplate() {
   const value = new URLSearchParams(window.location.search).get('template')
-  return templates[value] ? value : 'restaurant'
+  return templates[value] ? value : 'corporate'
 }
 
 export default function App() {
   const [selected, setSelected] = useState(initialTemplate)
+  if (selected === 'corporate') return <CorporateTemplate />
   const Template = templates[selected]
   const changeTemplate = (value) => {
     setSelected(value)
