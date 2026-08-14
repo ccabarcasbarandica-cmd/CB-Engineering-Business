@@ -72,10 +72,16 @@ export function GoogleTranslate() {
       clearGoogleTranslation()
       return
     }
-    const apply = () => applyGoogleLanguage(selectedLanguage)
+    let attempts = 0
+    let timer
+    const apply = () => {
+      attempts += 1
+      if (applyGoogleLanguage(selectedLanguage) || attempts >= 40) window.clearInterval(timer)
+    }
     apply()
+    timer = window.setInterval(apply, 250)
     window.addEventListener(READY_EVENT, apply)
-    return () => window.removeEventListener(READY_EVENT, apply)
+    return () => { window.clearInterval(timer); window.removeEventListener(READY_EVENT, apply) }
   }, [selectedLanguage])
 
   useEffect(() => {
